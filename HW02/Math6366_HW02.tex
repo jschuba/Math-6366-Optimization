@@ -1,0 +1,295 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb} % Equations
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{adjustbox} % Used to constrain images to a maximum size 
+\usepackage{xcolor} % Allow colors to be defined
+\usepackage{enumerate} % Needed for markdown enumerations to work
+\usepackage{geometry} % Used to adjust the document margins
+\usepackage{textcomp} % defines textquotesingle
+\usepackage[arrow,matrix,curve,cmtip,ps]{xy}
+\usepackage{hyperref}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework 02}
+\newcommand{\hmwkDueDate}{Sept 25, 2018}
+\newcommand{\hmwkClass}{Math 6366 Optimization}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{Andreas Mang}
+\newcommand{\hmwkAuthorName}{\textbf{Jonathan Schuba}}
+
+%
+% Title Page
+%
+
+\title{
+    \textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+    \normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+}
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+
+%-------------------------------------------
+%       Begin Local Macros
+%-------------------------------------------
+\newcommand{\Gal}{\mathrm{Gal}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\Prob}{\mathbf{P}}
+\newcommand{\Pow}{\mathcal{P}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\n}{\noindent}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\ind}{\operatorname{ind}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand\mc[1]{\marginpar{\sloppy\protect\footnotesize #1}}
+\newcommand{\ra}{\rangle}
+\newcommand{\la}{\langle}
+%-------------------------------------------
+%       end local macros
+%-------------------------------------------
+
+
+
+
+\begin{document}
+
+\maketitle
+
+Answer the following 9 questions and solve the problems on the computational part to get full credit for this homework assignment. Please follow the instructions for homework assignments. I reserve the right to deduct points if you do not follow these rules.
+
+\begin{homeworkProblem}[1]
+	Answer the following questions that relate functions f to their epigraph epi f.
+	\begin{enumerate}[a]
+		\item When is the epigraph of a function a halfspace?
+		\item When is the epigraph of a function a convex cone?
+		\item When is the epigraph of a function a polyhedron?
+	\end{enumerate}
+
+	\textbf{Solution:}
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[2]
+
+	\textbf{Solution:}
+	
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}[3]
+	A function $g : \R^n \to \R^n$ is called monotone if for all $x, y \in$ dom $g$,
+	
+	$$(g(x) - g(y))^\top(x - y) \ge 0$$.
+	
+	Suppose that $f : \R^n \to \R$ is a differentiable convex function. Show that its gradient $\nabla f$ is monotone.
+	
+	\textbf{Solution:}
+	
+	Take $x, y$ in dom $f$. Since $f$ is convex, we know that the following first order conditions hold:
+	\begin{align*}
+	f(y) &\ge f(x) + \nabla f(x)^\top (y-x) \\
+	f(x) &\ge f(y) + \nabla f(y)^\top (x-y) \\
+	\shortintertext{Adding these two equations together yields:}
+	f(x) + f(y) &\ge f(y) + f(x) + \nabla f(y)^\top (x-y) + \nabla f(x)^\top (y-x) \\
+	0 &\ge (\nabla f(x) -\nabla f(y))^\top(y-x)\\
+	0 &\le (\nabla f(x) -\nabla f(y))^\top(x-y)
+	\end{align*}
+	Which is the desired result. 
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[4]
+	
+	\textbf{Solution:}
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[5]
+	For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave.
+	\begin{enumerate}[a]
+		\item $f(x) = \exp(x) - 1$ on $\R$.
+		\item $f (x1, x2) = 1/{x_1x_2}$ on $\R^2_{++}$.
+		\item $f (x1, x2) = x^2_1/x_2$ on $\R \times \R_{++}$.
+	\end{enumerate}
+
+	\textbf{Solution:}
+	\begin{enumerate}[a]
+		\item $f'(x) = \exp(x)$
+		
+		$f''(x) = \exp(x) \ge 0$  Therefore, convex.
+	\end{enumerate}
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[6]
+	Show that $f (X) = tr (X^{-1})$ is convex on dom $f = S^n_{++}$, where $tr:\R^{n,n} \to \R$ is the trace.
+	
+	\textbf{Solution:}
+	
+	Let $X \in S^n_{++}$.  Therefore det$(X)>0$, and $X$ admits eigenvalue decomposition:
+	
+	$$ X = QVQ^{-1} $$ 
+	
+	Where the diagonal of $V$ holds the eigenvalues of $X$. (ie $V_{ii} = \lambda_i$). Then:
+	
+	$$ X^{-1} = QV^{-1}Q^{-1} $$
+	
+	And $V^{-1}_{ii} = 1/\lambda_i$. 
+	
+	Furthermore, $tr(X) = tr(V)$ and $tr(X^{-1}) = tr(V^{-1})$.  So,
+	
+	$$ f(X) = tr(X^{-1}) = \sum_{i=1}^{n}\frac{1}{\lambda_i}$$
+	$$ f'(X) = \sum_{i=1}^{n}\frac{-1}{\lambda_i^2}$$
+	$$ f''(X) = \sum_{i=1}^{n}\frac{2}{\lambda_i^3}$$
+	
+	Since $X$ is positive definite, all eigenvalues are greater than zero, so the second derivative is always positive.  Therefore $f$ is convex. 
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[7]
+	
+	\textbf{Solution:}
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[8]
+	
+	\textbf{Solution:}
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[9]
+	Show that the logistic function $f (x) = \exp(x)/(1 + \exp(x))$ with dom $f=\R$ is log-concave.
+	
+	\textbf{Solution:}
+	
+	A function $f$ is log-concave if $f(x) > 0$ and $ln(f(x))$ is concave.  The first criterion is fulfilled, since we know the logistic function has range $[0,1]$ over domain $\R$, and takes the extreme values only at $\pm\infty$. 
+	
+	\begin{align*}
+	 \ln(f(x)) &= \ln(\exp(x)/(1 + \exp(x))) \\
+				&= \ln(\exp(x)) - \ln(1 + \exp(x)) \\
+				&= x - \ln(1 + \exp(x))\\
+	\deriv{\ln(f(x))}	&= 1-\frac{\exp(x)}{1 + \exp(x)}
+	\end{align*}
+	This derivative is strictly decreasing, since $\frac{\exp(x)}{1 + \exp(x)}$ is strictly increasing.  A function in $\R$ is concave iff its derivative is monotonically decreasing, so the logistic sigmoid is log-concave.  
+	
+\end{homeworkProblem}
+
+
+
+\end{document}
