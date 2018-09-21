@@ -7,6 +7,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb} % Equations
 \usepackage{mathtools}
+\usepackage{cancel}
 \usepackage{commath}
 \usepackage{tikz}
 \usepackage[plain]{algorithm}
@@ -176,17 +177,38 @@ Answer the following 9 questions and solve the problems on the computational par
 	Answer the following questions that relate functions f to their epigraph epi f.
 	\begin{enumerate}[a]
 		\item When is the epigraph of a function a halfspace?
+			\subitem When the function is a hyperplane (affine function).
 		\item When is the epigraph of a function a convex cone?
+			\subitem Functions with the property that $f(ax) = af(x)$.
+			It must also include $f(\overrightarrow{0}) = 0$.
 		\item When is the epigraph of a function a polyhedron?
+			\subitem When the function is a pointwise maximum of affine functions.  Functions like $f(x) = \max\{f_1(x), ... , f_n(x)\}$ have an epigraph which is the intersection of the epigraphs of each $f_i$. If the functions are affine (with halfspace epigraphs), then the intersections of their epigraphs forms a polyhedron. 
 	\end{enumerate}
-
-	\textbf{Solution:}
 	
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[2]
+	Here we explore the second-order conditions for convexity on an affine set. Let $F \in \R^{n,m}, \tilde{x} \in \R^n$. The restriction of $f : \R^n \to \R$ to the affine set $\{ Fx+\tilde{x}:x \in \R^m \}$ is defined as the function $\tilde{f} : \R^m \to \R$ with $\tilde{f} (x) = f (Fx + \tilde{x})$, dom $f = \{x: Fx+\tilde{x} \in \mathrm{dom} f \}$. Suppose $f$ is twice differentiable with a convex domain.
+	\begin{enumerate}[a]
+		\item Show that $\tilde{f}$ is convex if and only if for all $x \in \mathrm{dom} \tilde{f}$ we have that $F^\top \nabla^2 f(Fx + \tilde{x})F \succeq 0$.
+		
+		\textbf{Solution:}
+		
+		\begin{align*}
+		\tilde{f}(x) &= f(Fx + \tilde{x}) \\
+		\nabla   \tilde{f}(x) &= \nabla f(Fx + \tilde{x})F \\
+		\nabla^2 \tilde{f}(x) &= F^\top \nabla^2 f(Fx + \tilde{x})F
+		\end{align*}
+		A function is convex if the Hessian is positive semi-definite.  Therefore, $\tilde{f}$ is convex if $F^\top \nabla^2 f(Fx + \tilde{x})F \succeq 0$, which is the required result. 
+			
+		\item Suppose that $A \in \R^{p,n}$ is a matrix whose nullspace $\N(A)$ is equal to the range of $F$ and rank $A =	n - $ rank $F$. Show that $\tilde{f}$ is convex if and only if for all $x  \in \mathrm{dom} \tilde{f}$ there exists a $\lambda \in \R$ such that
+		$$\nabla^2 f(Fx + \tilde{x}) + \lambda A^\top A \succeq 0$$.
+		
+		\textbf{Solution:}
+		
+	\end{enumerate}
 
-	\textbf{Solution:}
+
 	
 \end{homeworkProblem}
 
@@ -214,8 +236,58 @@ Answer the following 9 questions and solve the problems on the computational par
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[4]
+	We say the function$f :\R^n \times \R^m \to \R$ is convex-concave if $f (x, y)$ is a concave function of $y$, for each fixed $x$, and a convex function of $x$, for each fixed $y$. We also require its domain to have the product form
+	dom $f = A \times B$, where $A \in \R^n$ and $B \in \R^m$ are convex.
+	\begin{enumerate}[a]
+		\item Give a second-order condition for a twice differentiable function $f : \R^n \times \R^m \to \R$ to be convex-concave, in terms of its Hessian $\nabla^2 f (x, y)$.
+		
+		\textbf{Solution:}
+		
+		With fixed $\bar{y}$, the function $f(x,\bar{y}) = \bar{f}(x)$ must have positive-semidefinite Hessian, to be convex.  Denote by $\nabla^2_{xx}f(x,y)$ the (pos-semidef) Hessian of size $(n,n)$, which contains partial derivatives of $x$ coordinates only.  
+		
+		With fixed $\bar{x}$, the function $f(\bar{x},y) = \bar{f}(y)$ must have negative-semidefinite Hessian, to be concave.  Denote by $\nabla^2_{yy}f(x,y)$ the (neg-semidef) Hessian of size $(m,m)$, which contains partial derivatives of $y$ coordinates only.  
+		
+		Thus, the Hessian of $f(x,y)$ must take the $2\times2$ block form:
+		
+		 \[
+		\nabla^2 f(x,y) =
+		\left[ {\begin{array}{cc}
+			\nabla^2_{xx}f(x,y) & \nabla^2_{xy}f(x,y) \\
+			\nabla^2_{yx}f(x,y) & \nabla^2_{yy}f(x,y) \\
+			\end{array} } \right]
+		\]
+		
+		Where $[\nabla^2_{xy}f(x,y)]^\top = \nabla^2_{yx}f(x,y)$ are the rectangular matrices of mixed second partial derivatives. And where $\nabla^2_{xx}f(x,y)$ and $\nabla^2_{yy}f(x,y)$ are pos-semidef and neg-semidef, respectively. 
+
+	\item Suppose that $f :\R^n \times \R^m \to \R$ is convex-concave and differentiable, with $\nabla f (\tilde{x},\tilde{y}) = 0$. Show that the saddle-point property holds: For all $x, y$, we have $f (\tilde{x}, y) \le f (\tilde{x},\tilde{y}) \le f (x,\tilde{y})$. Show that this implies that $f$ satisfies the strong max-min property:
+	
+	$$	\underset{y\in\R^m}{\sup} \underset{x\in\R^n}{\inf} f(x,y) = \underset{x\in\R^n}{\inf} \underset{y\in\R^m}{\sup} f(x,y)  $$
+	
+	(and their common value is $f (\tilde{x},\tilde{y})$).
 	
 	\textbf{Solution:}
+	
+	Consider $f (x,\tilde{y})$ in terms of a second-order Taylor expansion at $f (\tilde{x},\tilde{y})$.
+	\begin{align*}
+	f (\tilde{x}, y) \le f (\tilde{x},\tilde{y}) &\le f (x,\tilde{y})\\
+		 &\le f (\tilde{x},\tilde{y}) + \nabla f (\tilde{x},\tilde{y})^\top \begin{pmatrix}x-\tilde{x}\\ \tilde{y}-\tilde{y}	\end{pmatrix}  + \frac{1}{2}\begin{pmatrix}x-\tilde{x}\\ \tilde{y}-\tilde{y}	\end{pmatrix}^\top \nabla^2 f(\tilde{x},\tilde{y}) \begin{pmatrix}x-\tilde{x}\\ \tilde{y}-\tilde{y}	\end{pmatrix}\\
+		 &\le f (\tilde{x},\tilde{y}) + \cancelto{0}{\nabla f (\tilde{x},\tilde{y})}^\top \begin{pmatrix}x-\tilde{x}\\ 0	\end{pmatrix}  + \frac{1}{2}\begin{pmatrix}x-\tilde{x}\\ 0	\end{pmatrix}^\top \nabla^2 f(\tilde{x},\tilde{y}) \begin{pmatrix}x-\tilde{x}\\ 0 \end{pmatrix}\\
+		&\le f (\tilde{x},\tilde{y}) + \frac{1}{2}\begin{pmatrix}x-\tilde{x}\\ 0	\end{pmatrix}^\top \nabla^2 f(\tilde{x},\tilde{y}) \begin{pmatrix}x-\tilde{x}\\ 0 \end{pmatrix}\\
+		 &\le f (\tilde{x},\tilde{y}) + \frac{1}{2}\begin{pmatrix}x-\tilde{x}	\end{pmatrix}^\top \nabla^2_{xx} f(\tilde{x},\tilde{y}) \begin{pmatrix}x-\tilde{x}\end{pmatrix}
+	\end{align*}
+	The second-order term on the right will only involve values in the upper-left block of the Hessian, which we already stated was positive-semidefinite. Thus, the right most term is always greater than or equal to zero, so the right-side inequality holds.  The same argument can be made for the left inequality, which will invoke the negative-semidefinite-ness of $\nabla^2_{yy}f(x,y)$.
+	\subitem
+	
+	Since $f$ is convex in $x$ for fixed $y$, $\underset{x\in\R^n}{\inf} f(x,y)$ occurs where $\nabla f(x,y) = 0$, (which is at $\tilde{x},\tilde{y}$,) so $$\underset{x\in\R^n}{\inf} f(x,y) = f(\tilde{x},y).$$  Similarly, since $f$ is concave in $y$ for fixed $x$, $\underset{y\in\R^m}{\sup}f(\tilde{x},y)$ also occurs at $\tilde{x},\tilde{y}$, so $$\underset{y\in\R^m}{\sup}f(\tilde{x},y) = f (\tilde{x},\tilde{y}).$$
+	
+	By the same arguments, 
+	
+	$$ \underset{x\in\R^n}{\inf} \underset{y\in\R^m}{\sup} f(x,y) = \underset{x\in\R^n}{\inf} f(x,\tilde{y}) = f (\tilde{x},\tilde{y}).$$
+	
+	So, 
+	$$	\underset{y\in\R^m}{\sup} \underset{x\in\R^n}{\inf} f(x,y) = f (\tilde{x},\tilde{y}) = \underset{x\in\R^n}{\inf} \underset{y\in\R^m}{\sup} f(x,y)  $$
+	\end{enumerate}
+
 	
 \end{homeworkProblem}
 
@@ -223,17 +295,37 @@ Answer the following 9 questions and solve the problems on the computational par
 	For each of the following functions determine whether it is convex, concave, quasiconvex, or quasiconcave.
 	\begin{enumerate}[a]
 		\item $f(x) = \exp(x) - 1$ on $\R$.
-		\item $f (x1, x2) = 1/{x_1x_2}$ on $\R^2_{++}$.
-		\item $f (x1, x2) = x^2_1/x_2$ on $\R \times \R_{++}$.
+			\begin{quote}
+				$f'(x) = \exp(x)$
+				
+				$f''(x) = \exp(x) \ge 0$  Therefore, convex.
+			\end{quote}
+		\item $f (x_1, x_2) = 1/{x_1x_2}$ on $\R^2_{++}$.
+			\begin{quote}
+				$$ \nabla^2 f(x,y) = \begin{bmatrix}
+				2/x^3y&1/x^2y^2  \\ 
+				1/x^2y^2& 2/xy^3
+				\end{bmatrix}  $$
+				
+				The function is convex, since this is positive definite. For any $(x,y) \in \R_{++}$,
+				\begin{align*}
+				& \begin{bmatrix}x & y\end{bmatrix} \begin{bmatrix}
+				2/x^3y&1/x^2y^2  \\ 
+				1/x^2y^2& 2/xy^3
+				\end{bmatrix}  
+				\begin{bmatrix}x \\ y\end{bmatrix}\\
+				& =\begin{bmatrix}x & y\end{bmatrix} 
+				\begin{bmatrix}\frac{3}{x^2y} \\ \frac{3}{xy^2}\end{bmatrix}\\
+				&=\begin{bmatrix}x & y\end{bmatrix} 
+				\begin{bmatrix}\frac{3}{x^2y} \\ \frac{3}{xy^2}\end{bmatrix}\\
+				&=\frac{6}{xy} > 0
+				\end{align*}
+			\end{quote}	
+		\item $f (x_1, x_2) = x^2_1/x_2$ on $\R \times \R_{++}$.
+			\begin{quote}
+				This is quadratic-over-linear, which is convex, from the book. 
+			\end{quote}		
 	\end{enumerate}
-
-	\textbf{Solution:}
-	\begin{enumerate}[a]
-		\item $f'(x) = \exp(x)$
-		
-		$f''(x) = \exp(x) \ge 0$  Therefore, convex.
-	\end{enumerate}
-	
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[6]
@@ -262,15 +354,67 @@ Answer the following 9 questions and solve the problems on the computational par
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[7]
-	
-	\textbf{Solution:}
+	Show that the following functions are convex. Hint: Use arguments based on composition rules to make your point (i.e., use arguments concerning the characteristics of $h$ and $g$ to establish that $f (x) = h \circ g = h(g(x))$ is convex).
+	\begin{enumerate}[a]
+		\item $f(x) = -\log(-\log(\sum_{i=1}^{m}\exp(a_i^\top x+b_i))) $ on dom $f = \{ x: \sum_{i=1}^{m}\exp(a_i^\top x+b_i)<1 \}$. Can use fact that log-sum-exp is convex.
+		
+		\begin{quote}
+			Let $g(x) = \log(\sum_{i=1}^{m}\exp(a_i^\top x+b_i))$, which is convex from hint.  Then we have:
+			\begin{align*}
+			f(x) &= -log(-g(x))  \tag{Let $h(x)=-g(x)$, note range $h = [0,\inf)$.}\\
+				&= -log(h(x))  
+			\end{align*}
+			Since log is concave on $\R_{++}$, $-\log$ is convex.  So $f$ is convex.
+		\end{quote}
+		
+		\item $f(x,u,v) = -\log (uv- x^\top x)$ on dom $f = \{ (x,u,v): uv>x^\top x, u,v>0  \}$. Can use fact that $x^\top x/u$ is convex. 
+		\begin{quote}
+			Since the dom $f$ is all $x,u,v$ where $uv-x^\top x>0$, we can assume that the range of the function $k(x,u,v) = uv-x^\top x$ is all $\R_{++}$ (which is convex).
+			\begin{align*}
+			f(x,u,v) &= -\log(uv-x^\top x) \\
+				&= -\log(k(x,u,v))
+			\end{align*}
+			Since $-\log$ is convex on $\R_{++}$, $f$ is convex.		
+		\end{quote}
+		
+		\item $f(x,t) = -\log(t^p - \|x\|^p_p)$ where $p>1$ and dom $f = \{ (x,t):t>\|x\|_p \}$.  Can use fact that $\|x\|_p^p/u^{p-1}$ is convex on $\{ (x,t):u>0 \}$
+		\begin{quote}
+			By the same argument as before, we can assume that since the domain of $f$ is $\{ (x,t):t-\|x\|_p>0 \}$, then $k(x,t)=t-\|x\|_p$ has range over all $\R_{++}$, and is convex.  Since $-\log$ is convex on $\R_{++}$, $f$ is convex. 
+		\end{quote}
+	\end{enumerate}
+
 	
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[8]
-	
-	\textbf{Solution:}
-	
+	Show that the following statements are valid. Hint: Use arguments based on the fact that the perspective of a convex function is convex to make your point.
+	\begin{enumerate}[a]
+		\item For $p>1$ the function
+		$$ f(x,t ) = \frac{\sum_{i=1}^{n}|x|^p}{t^{p-1}} = \frac{\|x\|_p^p}{t^{p-1}}$$
+		is convex on $\{ (x,t) : t>0 \}$.
+		
+		\textbf{Solution:}
+		
+		Let $k(x) = \|x\|_p^p$, which is convex since it is a power of a norm, both convex functions.  Then the perspective function applied to $k$ is:
+		$$ f(x,t) = t \|x/t\|^p_p = t\frac{\|x\|_p^p}{t^p} =  \frac{\|x\|_p^p}{t^{p-1}} $$.
+		Therefore, $f(x,t)$ is the perspective function applied to a convex function, and is convex. 
+		
+		\item The function
+		$$ f(x) = \frac{\|Ax+b\|^2_2}{c^\top x+d} $$
+		is convex on $\{ x: c^\top x+d > 0 \}$, where $A\in\R^{m,n}, b\in\R^m, c\in\R^n$, and $d\in\R$. 		
+		
+		\textbf{Solution:}
+		
+		Take $g(x) = \|Ax+b\|_2$, which is a norm of an affine function, and therefore convex. Take $h(x) = c^\top x+d$, which is affine, and therefore convex (and $>0$ by the problem statement).  We then have:
+		
+		$$ f(x) = \frac{\|Ax+b\|^2_2}{c^\top x+d} = \frac{g(x)^2}{h(x)}$$
+		
+		Which is quadratic-over-linear, and is convex.  
+		
+		
+	\end{enumerate}
+
+
 \end{homeworkProblem}
 
 \begin{homeworkProblem}[9]
@@ -278,7 +422,7 @@ Answer the following 9 questions and solve the problems on the computational par
 	
 	\textbf{Solution:}
 	
-	A function $f$ is log-concave if $f(x) > 0$ and $ln(f(x))$ is concave.  The first criterion is fulfilled, since we know the logistic function has range $[0,1]$ over domain $\R$, and takes the extreme values only at $\pm\infty$. 
+	A function $f$ is log-concave if $f(x) > 0$, and $\ln(f(x))$ is concave.  The first criterion is fulfilled, since we know the logistic function has range $[0,1]$ over domain $\R$, and takes the extreme values only at $\pm\infty$. 
 	
 	\begin{align*}
 	 \ln(f(x)) &= \ln(\exp(x)/(1 + \exp(x))) \\
