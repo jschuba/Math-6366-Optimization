@@ -307,19 +307,21 @@ Answer the following 9 questions and solve the problems on the computational par
 				1/x^2y^2& 2/xy^3
 				\end{bmatrix}  $$
 				
-				The function is convex, since this is positive definite. For any $(x,y) \in \R_{++}$,
+				The function is convex, since this Hessian is positive definite. For any $(a,b) \in \R$,
 				\begin{align*}
-				& \begin{bmatrix}x & y\end{bmatrix} \begin{bmatrix}
+				& \begin{bmatrix}a & b\end{bmatrix} \begin{bmatrix}
 				2/x^3y&1/x^2y^2  \\ 
 				1/x^2y^2& 2/xy^3
 				\end{bmatrix}  
-				\begin{bmatrix}x \\ y\end{bmatrix}\\
-				& =\begin{bmatrix}x & y\end{bmatrix} 
-				\begin{bmatrix}\frac{3}{x^2y} \\ \frac{3}{xy^2}\end{bmatrix}\\
-				&=\begin{bmatrix}x & y\end{bmatrix} 
-				\begin{bmatrix}\frac{3}{x^2y} \\ \frac{3}{xy^2}\end{bmatrix}\\
-				&=\frac{6}{xy} > 0
+				\begin{bmatrix}a \\ b\end{bmatrix}  \\
+				& = \frac{2a^2}{x^3y} + \frac{2ab}{x^2y^2} + \frac{2b^2}{xy^3}
+				\shortintertext{Let $s = \frac{a}{x^{3/2}y^{1/2}}$ and $t = \frac{b}{x^{1/2}y^{3/2}}$.   }
+				& = 2 (s^2 + st + t^2)\\
+				\shortintertext{Note that $|st| \le s^2 + t^2$ for any $s,t\in\R$, so}
+				& = 2 (s^2 + st + t^2)  \ge 0\\
 				\end{align*}
+				
+				
 			\end{quote}	
 		\item $f (x_1, x_2) = x^2_1/x_2$ on $\R \times \R_{++}$.
 			\begin{quote}
@@ -349,7 +351,7 @@ Answer the following 9 questions and solve the problems on the computational par
 	$$ f'(X) = \sum_{i=1}^{n}\frac{-1}{\lambda_i^2}$$
 	$$ f''(X) = \sum_{i=1}^{n}\frac{2}{\lambda_i^3}$$
 	
-	Since $X$ is positive definite, all eigenvalues are greater than zero, so the second derivative is always positive.  Therefore $f$ is convex. 
+	Since $X$ is positive definite, all eigenvalues $\lambda_i$ are greater than zero, so the second derivative is always positive.  Therefore $f$ is convex. 
 	
 \end{homeworkProblem}
 
@@ -361,7 +363,8 @@ Answer the following 9 questions and solve the problems on the computational par
 		\begin{quote}
 			Let $g(x) = \log(\sum_{i=1}^{m}\exp(a_i^\top x+b_i))$, which is convex from hint.  Then we have:
 			\begin{align*}
-			f(x) &= -log(-g(x))  \tag{Let $h(x)=-g(x)$, note range $h = [0,\inf)$.}\\
+			f(x) &= -log(-g(x))  
+			\shortintertext{Let $h(x)=-g(x)$, note range $h = [0,\inf)$, from the specification of dom $f$.}
 				&= -log(h(x))  
 			\end{align*}
 			Since log is concave on $\R_{++}$, $-\log$ is convex.  So $f$ is convex.
@@ -393,16 +396,19 @@ Answer the following 9 questions and solve the problems on the computational par
 		$$ f(x,t ) = \frac{\sum_{i=1}^{n}|x|^p}{t^{p-1}} = \frac{\|x\|_p^p}{t^{p-1}}$$
 		is convex on $\{ (x,t) : t>0 \}$.
 		
+		\begin{quote}
 		\textbf{Solution:}
 		
 		Let $k(x) = \|x\|_p^p$, which is convex since it is a power of a norm, both convex functions.  Then the perspective function applied to $k$ is:
 		$$ f(x,t) = t \|x/t\|^p_p = t\frac{\|x\|_p^p}{t^p} =  \frac{\|x\|_p^p}{t^{p-1}} $$.
 		Therefore, $f(x,t)$ is the perspective function applied to a convex function, and is convex. 
-		
+		\end{quote}
+	
 		\item The function
 		$$ f(x) = \frac{\|Ax+b\|^2_2}{c^\top x+d} $$
 		is convex on $\{ x: c^\top x+d > 0 \}$, where $A\in\R^{m,n}, b\in\R^m, c\in\R^n$, and $d\in\R$. 		
 		
+		\begin{quote}
 		\textbf{Solution:}
 		
 		Take $g(x) = \|Ax+b\|_2$, which is a norm of an affine function, and therefore convex. Take $h(x) = c^\top x+d$, which is affine, and therefore convex (and $>0$ by the problem statement).  We then have:
@@ -410,7 +416,7 @@ Answer the following 9 questions and solve the problems on the computational par
 		$$ f(x) = \frac{\|Ax+b\|^2_2}{c^\top x+d} = \frac{g(x)^2}{h(x)}$$
 		
 		Which is quadratic-over-linear, and is convex.  
-		
+		\end{quote}
 		
 	\end{enumerate}
 
