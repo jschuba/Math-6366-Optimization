@@ -145,7 +145,9 @@ x = np.random.randn(n)
 
 f = lambda x, flg : evaluate_regularized_lsq(A,x,b,beta = 1, flag = flg) 
 
-check_derivative(f, x)
+f(x, 'j')
+
+check_derivative(f, x, 'g')
 check_derivative(f, x, 'h')
 
 # Question 2

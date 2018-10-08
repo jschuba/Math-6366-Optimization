@@ -23,8 +23,8 @@ print(x.value)
 x1 = cp.Variable()
 x2 = cp.Variable()
 
-objective = cp.Minimize(x1 + x2)
-objective = cp.Minimize(cp.max_elemwise(x1,x2))
+#objective = cp.Minimize(x1 + x2)
+#objective = cp.Minimize(cp.max_elemwise(x1,x2))
 objective = cp.Minimize(x1**2 + 9 * x2**2)
 
 constraints = [2*x1 + x2 >= 1,
