@@ -33,13 +33,15 @@ def evaluate_regularized_lsq(A, x, b, beta = 0, B = None, flag = 'f'):
         B = np.eye(A.shape[0])
     
     if flag == 'f' or flag == 'j':
-        first_term = 0.5 * (A @ x-b) @ (A @ x-b)
+        first_term = 0.5 * (A @ x - b) @ (A @ x - b)
         second_term = beta * 0.5 * (B @ x) @ (B @ x)
         return first_term + second_term
+    
     elif flag == 'g' or flag == 'd':
         first_term = A.T @ A @ x - A.T @ b
         second_term = beta * B.T @ B @ x
         return first_term + second_term
+    
     elif flag == 'h' or flag == 'H':
         first_term = A @ A.T  # This should be A.T * A, but for some 
                                 # reason, this works correctly instead.
@@ -86,11 +88,13 @@ def check_derivative(f, x, flag = 'g'):
     for direction in range(num_directions):
         v = np.random.randn(n)
         for step in range(num_steps):
+            
             if flag == 'g' or flag == 'd':
                 ax.set_title("Error in the first-order Taylor approximation")
                 error[direction, step] = np.abs( f(x + h[step]*v, 'j') 
                                          - f(x,'j') 
                                          - h[step] * f(x,'g').T @ v)
+                
             elif flag == 'h' or flag == 'H':
                 ax.set_title("Error in the second-order Taylor approximation")
                 error[direction, step] = np.abs( f(x + h[step]*v, 'j') 
@@ -143,17 +147,19 @@ b = np.random.randn(m)
 x = np.random.randn(n)
 
 
-f = lambda x, flg : evaluate_regularized_lsq(A,x,b,beta = 1, flag = flg) 
+f = lambda x, flg : evaluate_regularized_lsq(A,x,b,beta = 0, flag = flg) 
 
-f(x, 'j')
+#evaluate_regularized_lsq(A,x,b,beta = 0, flag = 'f') 
+#f(x, 'f')
 
 check_derivative(f, x, 'g')
 check_derivative(f, x, 'h')
 
-# Question 2
+#%% Question 2
 
 A_tilde = np.array([[1,1,1],[1,2,3]])
 A = A_tilde.T @ A_tilde + 0.01 * np.diag([1,1,1])
+
 x_star = np.array([1,2,3])
 deltax = 0.01 * np.random.randn(3)
 b = A @ x_star + deltax
