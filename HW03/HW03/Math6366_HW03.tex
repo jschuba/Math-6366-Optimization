@@ -186,8 +186,7 @@
 	\begin{figure}[h]
 		\centering
 		\includegraphics[width=0.4\linewidth]{image/q01}
-		\caption{}
-		\label{fig:q01}
+
 	\end{figure}
 
 		
@@ -223,6 +222,8 @@
 	-22 \\ -14.5 \\ 30
 	\end{bmatrix}$ and $r = 1$.
 	
+	\textbf{Solution:}
+	
 	This is a quadratic, convex objective, so the optimal value occurs when the gradient is zero.
 	
 	\[ \nabla f_0(x) = Ax + q^\top = 0 \]
@@ -250,7 +251,7 @@
 	\end{aligned}
 	\]
 
-	where $\|A\|_2$ is the spectral norm and $A(x) = A_0 + \sum_{i=1}^{n}A_i$. Derive the equivalent semidefinite program. Use the fact that $A^\top A \succeq s^2 I$, where $I = text{diag}(1,\dots, 1) \in \R^{n,n}$.
+	where $\|A\|_2$ is the spectral norm and $A(x) = A_0 + \sum_{i=1}^{n}A_i$. Derive the equivalent semidefinite program. Use the fact that $A^\top A \succeq s^2 I$, where $I = \text{diag}(1,\dots, 1) \in \R^{n,n}$.
 		
 	\textbf{Solution:}
 	
@@ -303,18 +304,21 @@
 	\begin{enumerate}[a)]
 		\item minimize $\|Ax-b\|_\infty$ (unconstrained $\ell^\infty$-norm approximation).
 			\subitem {
-				The infinity norm is the absolute value of the largest element in the vector.  So, we can introduce a new variable, $r$, whose absolute value cannot be lower than that of the largest element in $\|Ax-b\|$.  We minimize over $r$ and $x$.
+				The infinity-norm is the absolute value of the largest element in the vector.  So, we can introduce a new variable, $r$, whose absolute value cannot be lower than that of the largest element in $Ax-b$.  We minimize over $r$ and $x$.
 				\[
 				\begin{aligned}
 				\underset{r\in\R, x\in\R^n}{\text{minimize}} \quad & r \\
 				\text{subject to} \quad & -r \le a_i^\top x - b_i \le r,\quad i = 1,2,\dots,m
 				\end{aligned}
 				\]
+				
+				This is equivalent to $t \ge \max_{i} |a_i^\top x - b_i|$.
 			}
 		
 		
 		\item minimize $\|Ax-b\|_1$ (unconstrained $\ell^1$-norm approximation).
 			\subitem{
+			The one-norm is the sum of the absolute values of the elements, so we introduce a vector $r$, whose elements are no less than the absolute values of the elements of $Ax-b$.  We minimize the sum of elements in $r$.
 			\[
 			\begin{aligned}
 			\underset{r\in\R^m, x\in\R^n}{\text{minimize}} \quad & \sum_{i=1}^m r_i \\
@@ -327,7 +331,7 @@
 			\subitem This is the same as the previous solution, with one additional constraint: 
 				\[
 				\begin{aligned}
-				\underset{r\in\R^m, x\in\R^n}{\text{minimize}} \quad & \sum r &\\
+			\underset{r\in\R^m, x\in\R^n}{\text{minimize}} \quad & \sum_{i=1}^m r_i \\
 				\text{subject to} \quad & -r_i \le a_i^\top x - b_i \le r_i, &i = 1,2,\dots,m\\
 										& -1 \le x_j \le 1 & j = 1,2,\dots,n
 				\end{aligned}
@@ -382,6 +386,9 @@
 	
 	
 \end{homeworkProblem}
+
+\pagebreak
+
 
 \begin{homeworkProblem}[8]
 	We consider a linear dynamical system with state $x(t) \in \R^n, t = 0,\dots, n_t$, and actuator or input signal
@@ -438,6 +445,8 @@
 	The last two component-wise inequalities encode the fuel consumption function. 
 	
 \end{homeworkProblem}
+
+\pagebreak
 
 \begin{homeworkProblem}[9]
 	Consider the quadratically constrained quadratic program
