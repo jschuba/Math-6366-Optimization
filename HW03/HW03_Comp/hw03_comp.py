@@ -158,7 +158,7 @@ check_derivative(f, x, 'h')
 #%% Question 2
 
 A_tilde = np.array([[1,1,1],[1,2,3]])
-A = A_tilde.T @ A_tilde + 0.01 * np.diag([1,1,1])
+A = A_tilde.T @ A_tilde + 0.001 * np.diag([1,1,1])
 
 x_star = np.array([1,2,3])
 deltax = 0.01 * np.random.randn(3)
