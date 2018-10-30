@@ -1,0 +1,470 @@
+\documentclass{article}
+
+\usepackage{fancyhdr}
+\usepackage{extramarks}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb} % Equations
+\usepackage{mathtools}
+\usepackage{commath}
+\usepackage{tikz}
+\usepackage[plain]{algorithm}
+\usepackage{algpseudocode}
+\usepackage{adjustbox} % Used to constrain images to a maximum size 
+\usepackage{xcolor} % Allow colors to be defined
+\usepackage{enumerate} % Needed for markdown enumerations to work
+\usepackage{geometry} % Used to adjust the document margins
+\usepackage{textcomp} % defines textquotesingle
+\usepackage[arrow,matrix,curve,cmtip,ps]{xy}
+\usepackage{hyperref}
+
+\usetikzlibrary{automata,positioning}
+
+%
+% Basic Document Settings
+%
+
+\topmargin=-0.45in
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.5in
+\textheight=9.0in
+\headsep=0.25in
+
+\linespread{1.1}
+
+\pagestyle{fancy}
+\lhead{\hmwkAuthorName}
+\chead{\hmwkClass\ (\hmwkClassInstructor\ \hmwkClassTime): \hmwkTitle}
+\rhead{\firstxmark}
+\lfoot{\lastxmark}
+\cfoot{\thepage}
+
+\renewcommand\headrulewidth{0.4pt}
+\renewcommand\footrulewidth{0.4pt}
+
+\setlength\parindent{0pt}
+
+
+%
+% Create Problem Sections
+%
+
+\newcommand{\enterProblemHeader}[1]{
+    \nobreak\extramarks{}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+}
+
+\newcommand{\exitProblemHeader}[1]{
+    \nobreak\extramarks{Problem \arabic{#1} (continued)}{Problem \arabic{#1} continued on next page\ldots}\nobreak{}
+    \stepcounter{#1}
+    \nobreak\extramarks{Problem \arabic{#1}}{}\nobreak{}
+}
+
+\setcounter{secnumdepth}{0}
+\newcounter{partCounter}
+\newcounter{homeworkProblemCounter}
+\setcounter{homeworkProblemCounter}{1}
+\nobreak\extramarks{Problem \arabic{homeworkProblemCounter}}{}\nobreak{}
+
+%
+% Homework Problem Environment
+%
+% This environment takes an optional argument. When given, it will adjust the
+% problem counter. This is useful for when the problems given for your
+% assignment aren't sequential. See the last 3 problems of this template for an
+% example.
+%
+\newenvironment{homeworkProblem}[1][-1]{
+    \ifnum#1>0
+        \setcounter{homeworkProblemCounter}{#1}
+    \fi
+    \section{Problem \arabic{homeworkProblemCounter}}
+    \setcounter{partCounter}{1}
+    \enterProblemHeader{homeworkProblemCounter}
+}{
+    \exitProblemHeader{homeworkProblemCounter}
+}
+
+
+%
+% Various Helper Commands
+%
+
+% Useful for algorithms
+\newcommand{\alg}[1]{\textsc{\bfseries \footnotesize #1}}
+% For derivatives
+\newcommand{\deriv}[1]{\frac{\mathrm{d}}{\mathrm{d}x} (#1)}
+% For partial derivatives
+\newcommand{\pderiv}[2]{\frac{\partial}{\partial #1} (#2)}
+% Integral dx
+\newcommand{\dx}{\mathrm{d}x}
+% Alias for the Solution section header
+\newcommand{\solution}{\textbf{\large Solution}}
+
+
+%-------------------------------------------
+%       Begin Local Macros
+%-------------------------------------------
+\newcommand{\Gal}{\mathrm{Gal}}
+\newcommand{\Aut}{\mathrm{Aut}}
+\newcommand{\Prob}{\mathbf{P}}
+\newcommand{\Pow}{\mathcal{P}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\n}{\noindent}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\im}{\operatorname{im}}
+\newcommand{\coker}{\operatorname{coker}}
+\newcommand{\ind}{\operatorname{ind}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand\mc[1]{\marginpar{\sloppy\protect\footnotesize #1}}
+\newcommand{\ra}{\rangle}
+\newcommand{\la}{\langle}
+%-------------------------------------------
+%       end local macros
+%-------------------------------------------
+
+
+%
+% Homework Details
+%   - Title
+%   - Due date
+%   - Class
+%   - Section/Time
+%   - Instructor
+%   - Author
+%
+
+\newcommand{\hmwkTitle}{Homework 04}
+\newcommand{\hmwkDueDate}{Oct 30, 2018}
+\newcommand{\hmwkClass}{Math 6366 Optimization}
+\newcommand{\hmwkClassTime}{}
+\newcommand{\hmwkClassInstructor}{Andreas Mang}
+\newcommand{\hmwkAuthorName}{\textbf{Jonathan Schuba}}
+
+%
+% Title Page
+%
+
+\title{
+	\textmd{\textbf{\hmwkClass:\ \hmwkTitle}}\\
+	\normalsize\vspace{0.1in}\small{Due\ on\ \hmwkDueDate}\\
+}
+\author{\hmwkAuthorName}
+\date{}
+
+\renewcommand{\part}[1]{\textbf{\large Part \Alph{partCounter}}\stepcounter{partCounter}\\}
+
+
+\begin{document}
+
+\maketitle
+
+\begin{homeworkProblem}[1]
+	Consider the problem
+	\[
+	\begin{aligned}
+		\underset{x}{\text{minimize}} \quad & f_0(x) \\ 
+		\text{subject to} \quad & Ax = b 
+	\end{aligned} 
+	\]
+	
+	The auxiliary function has the form:
+	
+	\[
+	\phi(x) = f_0(x) + \beta p(x) = f_0(x) + \beta \| Ax-b \|_2^2
+	\]
+	
+	Supposing $\tilde{x}$ is a minimizer of $\phi$, show how to find the dual feasible point from $\tilde{x}$.  Find the corresponding lower bound on the optimal value.  
+	
+
+	\textbf{Solution:}
+	
+	\[
+	\begin{aligned}
+	\phi(x) &= f_0(x) + \beta (Ax-b)^\top (Ax-b) \\
+	\phi(x) &= f_0(x) + \beta [x^\top A^\top Ax - 2 (Ax)^\top b + b^\top b] \\
+	\phi ' (x) &= f_0' (x) + 2\beta A^\top(Ax-b)
+	\end{aligned}
+	\]
+	
+	if $\tilde{x}$ minimizes $\phi$ then it also minimizes:
+	
+	\[
+	L(x, \nu) = f_0(x) + \nu^\top(Ax-b)
+	\]
+	with $  \nu^\top = 2\beta (A\tilde{x}-b)$, and then:
+	
+	\[
+	\begin{aligned}
+	g(\nu)  &= \inf_x (f_0(x) + \nu^\top(Ax-b)\\
+			&= f_0(\tilde{x}) + 2\beta \| A\tilde{x}-b \|_2^2
+	\end{aligned}
+	\]
+	This provides a lower bound on $f_{opt}$, since 
+	\[ f_0(x) \ge g(nu) = f_0(\tilde{x}) + 2\beta \| A\tilde{x}-b \|_2^2  \]
+
+	
+\end{homeworkProblem}
+
+\pagebreak
+
+\begin{homeworkProblem}[2]
+	The weak duality inequality, $g opt \le f opt$ , holds when $g opt = −\infty$ and $f opt = \infty$. Show that it holds in the
+	two cases below as well.
+	\begin{enumerate}[a]
+		\item If $f opt = −\infty$ we must have $g opt = −\infty$.
+		\item  If $g opt = \infty$ we must have $f opt = \infty$.
+	\end{enumerate}
+	
+	\textbf{Solution:}
+	
+	\begin{enumerate}[a]
+		\item If $fopt = -\infty$, the primal is unbounded below.  Therefore $L(x,\lambda) = f_0(x) + \sum_i \lambda_i f_i(x)$ is unbounded below, and $gopt = -\infty$.
+		\item If $gopt = \infty$, the dual is unbounded above, and the primal is infeasible.  To see this, consider if the primal were feasible, so that $f_i(x) \le 0$ for all $i$. Then for $\lambda \ge 0$.
+		\[\begin{aligned}
+		g(\lambda) &= inf(f_0(x) + \sum_i \lambda_i f_i(x))\\
+					&= f_0(\tilde{x}) + \sum_i \lambda_i f_i(x))
+		\end{aligned}		\]
+		Which implies the dual is bounded from above.
+	\end{enumerate}
+	
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[3]
+	Derive a dual problem for the unconstrained problem
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & \sum_{i=1}^k \|A_i x + b_i\|_2 + 1/2 \| x-x_{\text{ref}} \|_2^2  \\
+	\end{aligned}
+	\]
+	
+	\textbf{Solution:}
+	
+	Introduce variables $y_i$ and rewrite:
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & \sum_{i=1}^k \|y_i\|_2 + 1/2 \| x-x_{\text{ref}} \|_2^2  \\
+	\text{subject to} \quad &  A_i x + b_i - y_i = 0 \quad \forall i
+	\end{aligned}
+	\]
+	
+	The Lagrangian is:
+	\[\begin{aligned}
+	L(x,y,\nu) &= \sum_{i=1}^k \|y_i\|_2 + 1/2 \| x-x_{\text{ref}} \|_2^2 + \sum_{i=1}^k \nu_i^\top(A_i x + b_i -y_i)\\
+	\text{to find the infimum wrt x, take the derivative}\\
+	\nabla_x L(x,y,\nu) &= 0 + x-x_\text{ref} + \sum_{i=1}^k \nu_i^\top A_i \\
+	0 &= x-x_\text{ref} + \sum_{i=1}^k \nu_i^\top A_i 
+	\end{aligned} \]
+	
+	So the min of $L$ is $-\infty$ unless $\sum_{i=1}^k \nu_i^\top A_i =0$, whereupon $x = x_\text{ref}$. Then we have:
+	
+	\[ \begin{aligned}
+	g(\nu) &= \inf_y ( \sum_{i=1}^k \|y_i\|_2 + \sum_{i=1}^k \nu_i^\top(A_i x_\text{ref} + b_i - y_i)) \\
+	&= \sum_{i=1}^k \nu_i^\top b_i + \sum_{i=1}^k \nu_i^\top A_i x_\text{ref} + \sum_{i=1}^k \inf_y(\|y_i\|_2 - \nu_i^\top y_i) \\
+	&= \sum_{i=1}^k [ \nu_i^\top b_i  - \sup_y( \nu_i^\top y_i - \|y_i\|_2 ) ] \quad\quad \text{since}\ \nu_i^\top A_i =0 \\
+	&= \sum_{i=1}^k [ \nu_i^\top b_i - \|\nu_i\|_{2*} ]
+	\end{aligned} \]
+	
+	So the dual problem is:
+	
+		\[
+	\begin{aligned}
+	\underset{\nu}{\text{maximize}} \quad & g(\nu) \\
+	\text{subject to} \quad &  \sum_{i=1}^k \nu_i A_i = 0 \quad
+	\end{aligned}
+	\]
+	
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[4]
+	Consider the problem
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & f_0(x) \\ 
+	\text{subject to} \quad & f_i(x) \le 0 \quad \forall i
+	\end{aligned} 
+	\]
+	where $f_i$ are differentiable and convex. Suppose $x and \lambda$ satisfy the KKT conditions. Show that this implies that $\nabla f_0 ( x ) ^\top ( x − x^* ) \ge 0$ for all feasible x.
+	
+	-\linebreak
+	\textbf{Solution:}
+	
+	
+	The KKT conditions are:
+	\begin{align}
+	f_i(x^*) &\le 0 \label{1}\\
+	\lambda^*_i &\ge 0 \label{2}\\
+	\lambda^*_i  f_i(x^*) &= 0 \label{3} \\
+	\nabla f_0(x^*) + \sum \lambda^*_i \nabla f_i(x^*) &= 0 \label{4}
+	\end{align} 
+	
+	If $x$ is feasible, we have:
+	\[f_i(x) \le 0\]
+	and we have:
+	\[\begin{aligned}
+		0 \ge f_i(x) &\ge f_i(x^*) + \nabla f_i(x^*)^\top (x-x^*)\\
+	0 & \ge \sum \lambda_i^*[ f_i(x^*) + \nabla f_i(x^*)^\top (x-x^*) ] \quad \text{from \eqref{2}}\\
+	&= \sum \lambda_i^* f_i(x^*) + \sum \lambda_i^* \nabla f_i(x^*)^\top (x-x^*)  \\
+	&= \sum \lambda_i^* \nabla f_i(x^*)^\top (x-x^*) \quad \text{from \eqref{3}} \\
+	&= - \nabla f_0(x^*)^\top(x-x^*) \quad \text{from \eqref{4}}
+	\end{aligned} \]
+	Which establishes the result. 
+
+	
+\end{homeworkProblem}
+
+\begin{homeworkProblem}[5]
+	Find the dual function of the linear program
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & c^\top x \\ 
+	\text{subject to} \quad & Gx \preceq h\\
+	& Ax = b
+	\end{aligned} 
+	\]
+	Provide the dual problem, and make the implicit equality constraints explicit.
+	
+	\textbf{Solution:}
+	\[\begin{aligned}
+	g(\lambda,\nu) &= \inf_x L(x,\lambda, \nu) \\
+	&= \inf_x [c^\top x + \lambda^\top(Gx-h) + \nu^\top(Ax-b)] \\
+	&= -\lambda^\top h - \nu^\top b + \inf_x(c^\top +\lambda^\top G + \nu^\top A)x \\
+	\end{aligned}
+	\]
+	the latter term is a linear function, so:
+	\[
+	g(\lambda, \nu) = \begin{cases}
+	-\lambda^\top h - \nu^\top b & \text{if}\ \ c^\top +\lambda^\top G + \nu^\top A = 0 \\
+	-\infty & \text{otherwise}
+	\end{cases}
+	\]
+	The dual problem is 
+	\[
+	\begin{aligned}
+	\underset{x}{\text{maximise}} \quad & -\lambda^\top h-\nu^\top b\\ 
+	\text{subject to} \quad & \lambda \succeq 0 \\
+	& c^\top +\lambda^\top G + \nu^\top A = 0
+	\end{aligned} 
+	\]
+	
+
+\end{homeworkProblem}
+
+
+\begin{homeworkProblem}[7]
+	Consider the optimization problem
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & tr(Y(x)) \\ 
+	\text{subject to} \quad & x \succeq 0\\
+	& \mathbf{1}^\top x = 1
+	\end{aligned} 
+	\]
+	where $Y ( x ) : = ( \sum(x_iy_iy_i^\top) )^{-1} $, the vectors $y_i$ are given, and the domain is given by... Derive the dual problem. Simplify the dual problem as much as you can.
+	
+	\- \linebreak
+	\textbf{Solution:}
+	
+	Rewrite:
+	
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & tr(X^{-1}) \\ 
+	\text{subject to} \quad & -x \preceq 0\\
+	& \mathbf{1}^\top x = 1 \\
+	& X - \sum(x_iy_iy_i^\top) = 0
+	\end{aligned} 
+	\]
+	
+	The Lagrangian is
+	
+	\[ \begin{aligned}
+	L(X,x,\lambda, \nu, N) &= tr(X^{-1}) - \lambda^\top x + \nu(\mathbf{1}^\top x-1) + \langle N, X - \sum(x_iy_iy_i^\top) \rangle \\
+	& = tr(X^{-1}) + \rangle N,X\rangle - \sum \lambda_i x_i + \sum \nu x_i - \langle N, \sum(x_iy_iy_i^\top) \rangle -\nu\\
+	&= tr(X^{-1}) + tr(NX) + \sum x_i (-\lambda_i + \nu - y_i N y_i^\top) - \nu
+	\end{aligned}
+	\]
+	
+	The minimum over $x$ is $-\infty$ unless $-\lambda_i + \nu - y_i N y_i^\top = 0$.
+	
+	Taking the derivative wrt $X$ yields:
+	\[ \begin{aligned}
+	\nabla_X L =0 &=  -X^{-2} + N \\
+				N &= -X^{-2}\\
+				N^{-1/2} &= X
+	\end{aligned} \]
+	
+	The dual function is:
+	\[
+	g(\lambda,\nu, N ) = \begin{cases}
+	2tr(N^{1/2}) - \nu \qquad -\lambda_i + \nu - y_i N y_i^\top = 0 \\
+	-\infty \qquad \text{otherwise}
+	\end{cases}
+	\]
+	
+	The dual problem is: 
+		\[
+	\begin{aligned}
+	\underset{}{\text{maximise}} \quad & 2tr(N^{1/2}) - \nu\\ 
+	\text{subject to} \quad & -\lambda_i + \nu - y_i N y_i^\top = 0 
+	\end{aligned} 
+	\]
+	
+	
+\end{homeworkProblem}
+
+
+
+
+\begin{homeworkProblem}[8]
+	Consider the equality constrained least-squares problem
+	\[
+	\begin{aligned}
+	\underset{x}{\text{minimize}} \quad & \| Ax-b \|_2^2 \\ 
+	\text{subject to} \quad & Gx=h\\
+	\end{aligned} 
+	\]
+	Provide the KKT conditions and derive expressions for the primal solution $x^*$ and the dual solution $\nu^*$.
+	
+	\- \linebreak
+	\textbf{Solution:}
+	\[\begin{aligned}
+	L(x,\nu) &= \| Ax-b \|_2^2 + \nu^\top (Gx-h)\\
+	&= x^\top A^\top Ax + (G^\top\nu - 2 A^\top b)^\top x - b^\top b - \nu^\top h \\ 
+	\text{taking the derivative} \qquad\qquad
+	\nabla_x L = 0 &= 2 A^\top A x + G^\top\nu - 2 A^\top b \\
+	x &= 1/2 (A^\top A)^{-1} (2 A^\top b  - G^\top\nu  )	
+	\end{aligned} \]
+	
+	The dual is then:
+	\[ g(\nu) = -(1/4)(G^\top\nu - 2A^\top b) ^\top (A^\top A)^{-1} (G^\top \nu - 2A ^\top b) -\nu ^\top h \]
+	
+	The KKT optimality conditions provide the following equations:
+	
+	\[
+	Gx^* = h \]
+	\[
+	2 A^\top (Ax^*-b) + G^\top \nu^* = 0
+	\]
+	
+	Solving the equations for $x^*$ and $\nu^*$ yields some very long equations. (Please don't make me type them up.)
+	
+		
+\end{homeworkProblem}
+
+
+
+\end{document}

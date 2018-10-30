@@ -16,9 +16,6 @@ n = 4096
 t = list(range(n))
 y = np.array([0.5*math.sin(2*math.pi/n * i)*math.sin(0.01*i) for i in t ])
 y_delta = y + 0.05*np.random.randn(len(y))
-
-bounds = [np.min(y_delta), np.max(y_delta)]
-
 B = sparse.diags(diagonals = [-1*np.ones(n), np.ones(n-1)], 
                  offsets = [0, 1])
 
@@ -47,12 +44,12 @@ for beta in beta_list:
         result = prob.solve()
     except Exception as e:
         print("\t" + str(e))
-        result = prob.solve(solver="SCS")
+        result = prob.solve(solver="CVXOPT")
     
     if np.any(x.value) == None:
         print("\t Solve failed for some reason.")
         continue
-    x_star = np.sum(np.array(x.value),1)
+    x_star = np.array(x.value)
     
     objective_values.append(result)
     x_star_list.append(x.value)
@@ -110,17 +107,15 @@ for i, ax in enumerate(axes):
     ax.plot(y, label = "Original Signal")
     ax.plot(x_stars[i], label = "Solution")
     ax.tick_params(
-        axis='x',          # changes apply to the x-axis
-        which='both',      # both major and minor ticks are affected
-        bottom=False,      # ticks along the bottom edge are off
-        top=False,         # ticks along the top edge are off
-        labelbottom=False) # labels along the bottom edge are off
+        axis='x',      
+        which='both',    
+        bottom=False,   
+        top=False,       
+        labelbottom=False)
     ax.set_title(titles[i])
     ax.annotate(f"Relative Error = {round(rel_errors[i],4)}", [0, 0.5])
     
 ax.legend(loc = 'upper right')    
-
-
-
+fig.show()
 
 
